@@ -77,3 +77,47 @@ body {
   transform: scale(1.05);
   border-color: #666;
 }
+
+.silhouette-wrapper {
+  position: relative;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.silhouette {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 장비 위치 자동 정렬 */
+.helmet-slot {
+  position: absolute;
+  top: 5%;
+  left: 38%;
+  width: 60px;
+}
+
+.armor-slot {
+  position: absolute;
+  top: 38%;
+  left: 34%;
+  width: 100px;
+}
+
+.weapon-slot {
+  position: absolute;
+  top: 65%;
+  left: 75%;
+  width: 70px;
+}
+
+.character-panel {
+  position: relative;
+  width: 300px;
+  text-align: center;
+}
+
+.equipment-icon {
+  z-index: 2;
+}
