@@ -1,6 +1,44 @@
 // LifeRPG.jsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './index.css';
+
+function LifeRPG() {
+  return (
+    <div className="rpg-ui">
+      <div className="rpg-window">
+        <h2 className="rpg-title">장비</h2>
+
+        <div className="rpg-layout">
+          {/* 왼쪽 슬롯 */}
+          <div className="rpg-column left">
+            <div className="rpg-slot"></div>
+            <div className="rpg-slot"></div>
+            <div className="rpg-slot"></div>
+          </div>
+
+          {/* 중앙 캐릭터 실루엣 */}
+          <div className="rpg-center">
+            <img
+              src="/silhouette.png"
+              alt="character silhouette"
+              className="rpg-silhouette"
+            />
+          </div>
+
+          {/* 오른쪽 슬롯 */}
+          <div className="rpg-column right">
+            <div className="rpg-slot"></div>
+            <div className="rpg-slot"></div>
+            <div className="rpg-slot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default LifeRPG;
+
 
 // 초기 장비 슬롯
 const initialEquipment = {
