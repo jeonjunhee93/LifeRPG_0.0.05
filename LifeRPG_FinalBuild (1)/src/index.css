@@ -1,128 +1,124 @@
-/* 기본 설정 */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background: radial-gradient(#2d1a0f, #1a0f08);
+  font-family: "Noto Sans KR", sans-serif;
+  color: #fff;
 }
 
-/* 게임 전체 컨테이너 */
-.game-container {
+.rpg-ui {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.rpg-window {
+  width: 1100px;
+  background: linear-gradient(180deg, #3a2314 0%, #1f1208 100%);
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  padding: 20px;
+}
+
+.rpg-title {
+  font-size: 24px;
+  color: #ffcc66;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.rpg-layout {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  align-items: flex-start;
 }
 
-/* 좌측 캐릭터/장비창 패널 */
-.character-panel {
-  position: relative;
-  width: 300px;
+.rpg-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* 캐릭터 실루엣 이미지 */
-.silhouette {
-  max-width: 150px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-/* 장비 아이콘 위치 오버레이 */
-.equipment-icon {
-  position: absolute;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-}
-
-/* 우측 퀘스트/인벤토리 패널 */
-.quest-inventory-panel {
-  width: 60%;
-  background-color: white;
-  padding: 20px;
+/* 슬롯 기본 */
+.rpg-slot {
+  width: 90px;
+  height: 90px;
+  background: rgba(120, 80, 40, 0.4);
+  border: 2px solid #5a3b20;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* 인벤토리 박스 */
-.inventory {
-  margin-top: 30px;
+.rpg-slot img {
+  width: 80%;
+  height: auto;
 }
 
-.inventory h2 {
-  margin-bottom: 10px;
-  font-size: 18px;
+/* 중앙 실루엣 */
+.rpg-center {
+  text-align: center;
+  position: relative;
 }
 
-/* 인벤토리 안의 아이템들 */
-.inventory-items {
+.rpg-silhouette {
+  width: 400px;
+  opacity: 0.9;
+}
+
+.rpg-status {
+  margin-top: 10px;
+  color: #ffeec0;
+  font-size: 14px;
+}
+
+/* 퀘스트 */
+.rpg-quest {
+  background: rgba(90, 60, 30, 0.4);
+  border-radius: 10px;
+  padding: 10px;
+  width: 180px;
+  text-align: left;
+}
+
+.rpg-quest button {
+  width: 100%;
+  margin-top: 6px;
+  padding: 4px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.rpg-quest button.disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+/* 인벤토리 */
+.rpg-inventory {
+  margin-top: 25px;
+}
+
+.inventory-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-/* 인벤토리용 아이템 크기 통일 (50x50) */
-.inventory-items img {
+.inventory-grid img {
   width: 50px;
   height: 50px;
-  object-fit: contain;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #f9f9f9;
   cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  padding: 2px;
-  transition: transform 0.1s ease-in-out;
 }
 
-.inventory-items img:hover {
-  transform: scale(1.05);
-  border-color: #666;
-}
-
-/* 🎯 캐릭터 실루엣 전체 */
-.silhouette-wrapper {
-  position: relative;
-  width: 480px; /* 🔹 캐릭터 크기 확대 (기존 300~380 → 480) */
-  margin: 0 auto;
-}
-
-.silhouette {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* 🪖 투구 위치 (머리) */
-.helmet-slot {
-  position: absolute;
-  top: 5%;
-  left: 39%;
-  width: 95px;
-}
-
-/* 🛡 갑옷 위치 (상체 중앙) */
-.armor-slot {
-  position: absolute;
-  top: 37%;
-  left: 34%;
-  width: 150px;
-}
-
-/* ⚔️ 무기 위치 (오른쪽 팔 근처) */
-.weapon-slot {
-  position: absolute;
-  top: 70%;
-  left: 80%;
-  width: 110px;
-}
-
-/* 📦 캐릭터 패널 기본 설정 */
-.character-panel {
-  position: relative;
-  width: 480px; /* 실루엣과 동일한 폭으로 맞춤 */
-  text-align: center;
-  margin: 0 auto;
-}
-
-.equipment-icon {
-  z-index: 2;
+.inventory-grid img.equipped-item {
+  border: 2px solid gold;
+  background: #fffbe6;
 }
