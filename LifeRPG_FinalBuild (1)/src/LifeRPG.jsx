@@ -34,13 +34,6 @@ const equipmentData = [
   },
 ];
 
-// 장비 위치
-const equipmentPositions = {
-  helmet: { top: '10px', left: '105px' },
-  armor: { top: '100px', left: '90px' },
-  weapon: { top: '180px', left: '200px' },
-};
-
 // 퀘스트 데이터
 const questData = [
   {
@@ -76,13 +69,13 @@ function LifeRPG() {
   const [inventory, setInventory] = useState(equipmentData);
   const [equipped, setEquipped] = useState(initialEquipment);
 
-  // 퀘스트 보상 기록 (localStorage)
+  // 퀘스트 보상 기록
   const [questLog, setQuestLog] = useState(() => {
     const saved = localStorage.getItem('questLog');
     return saved ? JSON.parse(saved) : {};
   });
 
-  // 매일 자정에 퀘스트 초기화
+  // 자정에 퀘스트 초기화
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
@@ -94,11 +87,10 @@ function LifeRPG() {
     return () => clearInterval(interval);
   }, []);
 
-  // 장착/해제 및 스탯 반영
+  // 장비 장착/해제
   const handleEquip = (item) => {
     setEquipped((prev) => {
       const newEquipped = { ...prev };
-
       if (prev[item.type]?.name === item.name) {
         newEquipped[item.type] = null;
       } else {
@@ -119,7 +111,7 @@ function LifeRPG() {
     });
   };
 
-  // 퀘스트 보상 하루 1회 제한
+  // 퀘스트 하루 1회 제한
   const handleQuestReward = (quest) => {
     const today = new Date().toISOString().split('T')[0];
     if (questLog[quest.id] === today) {
@@ -150,21 +142,21 @@ function LifeRPG() {
           힘: {stats.strength} / 지능: {stats.intelligence} / 운: {stats.luck}
         </p>
 
-        {/* 실루엣 */}
-        <img src="/item/silhouette.png" alt="silhouette" className="silhouette" />
+        {/* ✅ 실루엣 경로 수정 */}
+        <div className="silhouette-wrapper">
+          <img src="/silhouette.png" alt="silhouette" className="silhouette" />
 
-        {/* 장착된 장비 */}
-        {Object.keys(equipped).map((slot) =>
-          equipped[slot] ? (
-            <img
-              key={slot}
-              src={equipped[slot].src}
-              alt={slot}
-              className="equipment-icon"
-              style={equipmentPositions[slot]}
-            />
-          ) : null
-        )}
+          {/* 장착된 장비 자동 위치 */}
+          {equipped.helmet && (
+            <img src={equipped.helmet.src} alt="helmet" className="helmet-slot" />
+          )}
+          {equipped.armor && (
+            <img src={equipped.armor.src} alt="armor" className="armor-slot" />
+          )}
+          {equipped.weapon && (
+            <img src={equipped.weapon.src} alt="weapon" className="weapon-slot" />
+          )}
+        </div>
       </div>
 
       {/* 퀘스트 + 인벤토리 */}
@@ -174,7 +166,6 @@ function LifeRPG() {
         {questData.map((quest) => {
           const today = new Date().toISOString().split('T')[0];
           const completedToday = questLog[quest.id] === today;
-
           return (
             <div
               key={quest.id}
