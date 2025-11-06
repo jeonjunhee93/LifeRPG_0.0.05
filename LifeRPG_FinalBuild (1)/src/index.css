@@ -5,6 +5,35 @@ body {
   color: #fff;
 }
 
+.login-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #ffddaa;
+}
+
+.login-screen input {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 220px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.login-screen button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffcc66;
+  color: #2d1a0f;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .rpg-ui {
   display: flex;
   justify-content: center;
@@ -20,11 +49,30 @@ body {
   padding: 20px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logout-btn {
+  background-color: #a63a3a;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.player-id {
+  font-size: 16px;
+  color: #ffdf80;
+}
+
 .rpg-title {
   font-size: 24px;
   color: #ffcc66;
-  margin-bottom: 20px;
-  text-align: left;
+  margin-bottom: 10px;
 }
 
 .rpg-layout {
@@ -39,7 +87,6 @@ body {
   gap: 20px;
 }
 
-/* 슬롯 기본 */
 .rpg-slot {
   width: 90px;
   height: 90px;
@@ -56,10 +103,8 @@ body {
   height: auto;
 }
 
-/* 중앙 실루엣 */
 .rpg-center {
   text-align: center;
-  position: relative;
 }
 
 .rpg-silhouette {
@@ -73,7 +118,6 @@ body {
   font-size: 14px;
 }
 
-/* 퀘스트 */
 .rpg-quest {
   background: rgba(90, 60, 30, 0.4);
   border-radius: 10px;
@@ -98,7 +142,6 @@ body {
   cursor: not-allowed;
 }
 
-/* 인벤토리 */
 .rpg-inventory {
   margin-top: 25px;
 }
