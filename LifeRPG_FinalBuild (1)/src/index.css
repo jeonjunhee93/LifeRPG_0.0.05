@@ -1,21 +1,24 @@
-// index.css
+/* 기본 설정 */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
 }
 
+/* 게임 전체 컨테이너 */
 .game-container {
   display: flex;
   justify-content: space-between;
   padding: 20px;
 }
 
+/* 좌측 캐릭터/장비창 패널 */
 .character-panel {
   position: relative;
   width: 300px;
 }
 
+/* 캐릭터 실루엣 이미지 */
 .silhouette {
   max-width: 150px;
   height: auto;
@@ -23,7 +26,7 @@ body {
   margin: 0 auto;
 }
 
-
+/* 장비 아이콘 위치 오버레이 */
 .equipment-icon {
   position: absolute;
   z-index: 2;
@@ -31,10 +34,46 @@ body {
   height: 40px;
 }
 
+/* 우측 퀘스트/인벤토리 패널 */
 .quest-inventory-panel {
   width: 60%;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* 인벤토리 박스 */
+.inventory {
+  margin-top: 30px;
+}
+
+.inventory h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+/* 인벤토리 안의 아이템들 */
+.inventory-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 인벤토리용 아이템 크기 통일 (50x50) */
+.inventory-items img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 2px;
+  transition: transform 0.1s ease-in-out;
+}
+
+.inventory-items img:hover {
+  transform: scale(1.05);
+  border-color: #666;
 }
