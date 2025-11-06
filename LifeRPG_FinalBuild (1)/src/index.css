@@ -78,9 +78,10 @@ body {
   border-color: #666;
 }
 
+/* 🎯 캐릭터 실루엣 전체 */
 .silhouette-wrapper {
   position: relative;
-  width: 380px; /* 🔹 기존보다 넓게 확대 */
+  width: 480px; /* 🔹 캐릭터 크기 확대 (기존 300~380 → 480) */
   margin: 0 auto;
 }
 
@@ -90,30 +91,38 @@ body {
   display: block;
 }
 
-/* 장비 위치 자동 정렬 */
+/* 🪖 투구 위치 (머리) */
 .helmet-slot {
   position: absolute;
-  top: 7%;
+  top: 5%;
   left: 39%;
-  width: 80px; /* 🔹 투구 크기 약간 확대 */
+  width: 95px;
 }
 
+/* 🛡 갑옷 위치 (상체 중앙) */
 .armor-slot {
   position: absolute;
-  top: 40%;
+  top: 37%;
   left: 34%;
-  width: 130px; /* 🔹 갑옷 크기 확대 */
+  width: 150px;
 }
 
+/* ⚔️ 무기 위치 (오른쪽 팔 근처) */
 .weapon-slot {
   position: absolute;
   top: 70%;
-  left: 78%;
-  width: 90px; /* 🔹 무기 크기 확대 */
+  left: 80%;
+  width: 110px;
 }
 
+/* 📦 캐릭터 패널 기본 설정 */
 .character-panel {
   position: relative;
-  width: 380px; /* 실루엣과 동일하게 맞춤 */
+  width: 480px; /* 실루엣과 동일한 폭으로 맞춤 */
   text-align: center;
+  margin: 0 auto;
+}
+
+.equipment-icon {
+  z-index: 2;
 }
