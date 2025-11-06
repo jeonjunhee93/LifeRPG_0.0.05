@@ -17,10 +17,12 @@ body {
 }
 
 .silhouette {
-  width: 100%;
+  max-width: 300px;
   height: auto;
-  z-index: 1;
+  display: block;
+  margin: 0 auto;
 }
+
 
 .equipment-icon {
   position: absolute;
