@@ -17,9 +17,10 @@ body {
 }
 
 .silhouette {
-  width: 100%;
-  height: auto;
-  z-index: 1;
+  width: 150px;       /* 원하는 가로 크기 */
+  height: auto;       /* 비율 유지 */
+  display: block;
+  margin: 0 auto;     /* 가운데 정렬 */
 }
 
 .equipment-icon {
