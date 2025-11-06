@@ -1,63 +1,73 @@
 // LifeRPG.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css';
 
 // 초기 장비 슬롯
 const initialEquipment = {
   helmet: null,
   armor: null,
-  weapon: null
+  weapon: null,
 };
 
 // 초기 스탯
 const initialStats = { strength: 0, intelligence: 0, luck: 0 };
 
-// 인벤토리 아이템 데이터
+// 인벤토리 데이터
 const equipmentData = [
   {
     name: 'Dark Moon Sword',
     type: 'weapon',
     src: '/item/파멸의검_에픽.png',
-    stats: { strength: 5, intelligence: 0, luck: 1 }
+    stats: { strength: 5, intelligence: 0, luck: 1 },
   },
   {
     name: 'Knight Helmet',
     type: 'helmet',
     src: '/item/용기의 투구.png',
-    stats: { strength: 0, intelligence: 3, luck: 0 }
+    stats: { strength: 0, intelligence: 3, luck: 0 },
   },
   {
     name: 'Steel Armor',
     type: 'armor',
     src: '/item/기사단 정예 갑주.png',
-    stats: { strength: 4, intelligence: 0, luck: 0 }
+    stats: { strength: 4, intelligence: 0, luck: 0 },
   },
-  {
-    name: 'Rusty Sword',
-    type: 'weapon',
-    src: '/item/무딘칼_일반.png',
-    stats: { strength: 1, intelligence: 0, luck: 0 }
-  },
-  {
-    name: 'Old Iron Armor',
-    type: 'armor',
-    src: '/item/낡은 철 갑옷.png',
-    stats: { strength: 2, intelligence: 0, luck: 0 }
-  },
-  {
-    name: 'Brave Crown',
-    type: 'helmet',
-    src: '/item/신왕의 면류관.png',
-    stats: { strength: 0, intelligence: 5, luck: 2 }
-  }
 ];
 
-// 장비 위치 (실루엣 기준)
+// 장비 위치
 const equipmentPositions = {
   helmet: { top: '10px', left: '105px' },
   armor: { top: '100px', left: '90px' },
   weapon: { top: '180px', left: '200px' },
 };
+
+// 퀘스트 데이터
+const questData = [
+  {
+    id: 1,
+    name: '집 청소하기',
+    difficulty: '★☆☆ (쉬움)',
+    rewardXp: 50,
+    rewardGold: 30,
+    color: '#b3ffb3',
+  },
+  {
+    id: 2,
+    name: '하루 업무 처리',
+    difficulty: '★★☆ (보통)',
+    rewardXp: 80,
+    rewardGold: 50,
+    color: '#fff4b3',
+  },
+  {
+    id: 3,
+    name: '운동 30분 하기',
+    difficulty: '★★★ (어려움)',
+    rewardXp: 120,
+    rewardGold: 80,
+    color: '#ffb3b3',
+  },
+];
 
 function LifeRPG() {
   const [xp, setXp] = useState(100);
@@ -66,21 +76,37 @@ function LifeRPG() {
   const [inventory, setInventory] = useState(equipmentData);
   const [equipped, setEquipped] = useState(initialEquipment);
 
-  // 장착 및 해제 기능 + 스탯 자동계산
+  // 퀘스트 보상 기록 (localStorage)
+  const [questLog, setQuestLog] = useState(() => {
+    const saved = localStorage.getItem('questLog');
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  // 매일 자정에 퀘스트 초기화
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      if (now.getHours() === 0 && now.getMinutes() === 0) {
+        localStorage.removeItem('questLog');
+        setQuestLog({});
+      }
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // 장착/해제 및 스탯 반영
   const handleEquip = (item) => {
-    setEquipped(prev => {
+    setEquipped((prev) => {
       const newEquipped = { ...prev };
 
-      // 같은 아이템 더블클릭 시 해제
       if (prev[item.type]?.name === item.name) {
         newEquipped[item.type] = null;
       } else {
         newEquipped[item.type] = item;
       }
 
-      // 새 스탯 계산
       const newStats = { strength: 0, intelligence: 0, luck: 0 };
-      Object.values(newEquipped).forEach(eq => {
+      Object.values(newEquipped).forEach((eq) => {
         if (eq?.stats) {
           newStats.strength += eq.stats.strength || 0;
           newStats.intelligence += eq.stats.intelligence || 0;
@@ -93,19 +119,42 @@ function LifeRPG() {
     });
   };
 
+  // 퀘스트 보상 하루 1회 제한
+  const handleQuestReward = (quest) => {
+    const today = new Date().toISOString().split('T')[0];
+    if (questLog[quest.id] === today) {
+      alert(`"${quest.name}" 퀘스트는 오늘 이미 완료했습니다!`);
+      return;
+    }
+
+    setXp((prev) => prev + quest.rewardXp);
+    setGold((prev) => prev + quest.rewardGold);
+
+    const updatedLog = { ...questLog, [quest.id]: today };
+    setQuestLog(updatedLog);
+    localStorage.setItem('questLog', JSON.stringify(updatedLog));
+
+    alert(
+      `${quest.name} 완료!\n보상: +${quest.rewardXp} XP / +${quest.rewardGold} Gold 🎉`
+    );
+  };
+
   return (
     <div className="game-container">
+      {/* 캐릭터 패널 */}
       <div className="character-panel">
         <h1>Life R.P.G</h1>
         <p>경험치: {xp}</p>
         <p>골드: {gold}</p>
-        <p>힘: {stats.strength} / 지능: {stats.intelligence} / 운: {stats.luck}</p>
+        <p>
+          힘: {stats.strength} / 지능: {stats.intelligence} / 운: {stats.luck}
+        </p>
 
-        {/* 캐릭터 실루엣 */}
+        {/* 실루엣 */}
         <img src="/item/silhouette.png" alt="silhouette" className="silhouette" />
 
-        {/* 장착된 아이템 표시 */}
-        {Object.keys(equipped).map((slot) => (
+        {/* 장착된 장비 */}
+        {Object.keys(equipped).map((slot) =>
           equipped[slot] ? (
             <img
               key={slot}
@@ -115,13 +164,56 @@ function LifeRPG() {
               style={equipmentPositions[slot]}
             />
           ) : null
-        ))}
+        )}
       </div>
 
-      {/* 인벤토리 패널 */}
+      {/* 퀘스트 + 인벤토리 */}
       <div className="quest-inventory-panel">
+        <h2>퀘스트</h2>
+
+        {questData.map((quest) => {
+          const today = new Date().toISOString().split('T')[0];
+          const completedToday = questLog[quest.id] === today;
+
+          return (
+            <div
+              key={quest.id}
+              style={{
+                marginBottom: '10px',
+                padding: '10px',
+                border: '1px solid #aaa',
+                borderRadius: '10px',
+                backgroundColor: completedToday ? '#d3ffd3' : quest.color,
+                boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+              }}
+            >
+              <strong>{quest.name}</strong>
+              <p>난이도: {quest.difficulty}</p>
+              <p>
+                🎯 보상: <span style={{ color: '#008000' }}>XP +{quest.rewardXp}</span> /{' '}
+                <span style={{ color: '#DAA520' }}>Gold +{quest.rewardGold}</span>
+              </p>
+              <button
+                onClick={() => handleQuestReward(quest)}
+                disabled={completedToday}
+                style={{
+                  padding: '6px 12px',
+                  backgroundColor: completedToday ? '#aaa' : '#4CAF50',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: completedToday ? 'not-allowed' : 'pointer',
+                }}
+              >
+                {completedToday ? '오늘 완료됨' : '보상 받기'}
+              </button>
+            </div>
+          );
+        })}
+
         <h2>인벤토리</h2>
         <p>더블클릭으로 장착 / 해제 가능</p>
+
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
           {inventory.map((item, index) => (
             <img
@@ -133,10 +225,13 @@ function LifeRPG() {
                 width: '50px',
                 height: '50px',
                 cursor: 'pointer',
-                border: equipped[item.type]?.name === item.name ? '2px solid gold' : '1px solid #ccc',
+                border:
+                  equipped[item.type]?.name === item.name
+                    ? '2px solid gold'
+                    : '1px solid #ccc',
                 borderRadius: '8px',
                 padding: '2px',
-                backgroundColor: '#f9f9f9'
+                backgroundColor: '#f9f9f9',
               }}
               onDoubleClick={() => handleEquip(item)}
             />
