@@ -108,21 +108,20 @@ export default function LifeRPG() {
         ))}
       </div>
 
-      <div className="inventory">
-        <h2>인벤토리</h2>
-        <div className="items">
-          {inventory.map((item, index) => (
-            <img
-              key={index}
-              src={getItemImage(item.type, item.name)}
-              alt={item.name}
-              className="inventory-item"
-              onClick={() => equipItem(item)}
-              title={`[${item.type}] ${item.name}`}
-            />
-          ))}
-        </div>
-      </div>
+     <div className="inventory">
+  <h2>인벤토리</h2>
+  <div className="inventory-items">
+    {inventory.map((item, index) => (
+      <img
+        key={index}
+        src={item.image}
+        alt={item.name}
+        onDoubleClick={() => equipItem(item)}
+        style={{ width: '50px', height: '50px', margin: '5px', cursor: 'pointer' }}
+      />
+    ))}
+  </div>
+</div>
     </div>
   );
 }
