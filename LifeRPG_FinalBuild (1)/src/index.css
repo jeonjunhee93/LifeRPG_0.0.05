@@ -1,40 +1,10 @@
-// index.css
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: "Arial", sans-serif;
+  background: #111;
+  color: white;
 }
 
-.game-container {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-}
-
-.character-panel {
-  position: relative;
-  width: 300px;
-}
-
-.silhouette {
-  max-width: 150px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-
-.equipment-icon {
-  position: absolute;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-}
-
-.quest-inventory-panel {
-  width: 60%;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+h1 {
+  text-align: center;
 }
