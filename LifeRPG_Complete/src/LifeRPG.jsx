@@ -1,11 +1,4 @@
-import React from "react";
-
+// 게임 로직은 다음 셀에서 삽입됩니다
 export default function LifeRPG() {
-  return (
-    <div>
-      <h1>Life RPG</h1>
-      <p>게임 로직 구현됨 - 장비 장착, 스탯, 보상, 퀘스트 포함</p>
-      {/* 여기에 게임 UI 로직이 구현됩니다 */}
-    </div>
-  );
+  return <div>Life RPG 게임 로딩 중...</div>;
 }
