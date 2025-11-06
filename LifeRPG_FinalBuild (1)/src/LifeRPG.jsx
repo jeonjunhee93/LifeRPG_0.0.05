@@ -1,127 +1,150 @@
-import React, { useState } from "react";
+// LifeRPG.jsx
+import React, { useState } from 'react';
+import './index.css';
 
-const initialStats = {
-  힘: 0,
-  지능: 0,
-  운: 0,
-};
-
+// 초기 장비 슬롯
 const initialEquipment = {
-  weapon: null,
-  armor: null,
   helmet: null,
+  armor: null,
+  weapon: null
 };
 
-const initialInventory = [];
+// 초기 스탯
+const initialStats = { strength: 0, intelligence: 0, luck: 0 };
 
-const quests = [
-  { id: 1, name: "방 청소", xp: 20, gold: 10, difficulty: "쉬움" },
-  { id: 2, name: "서류 정리", xp: 30, gold: 15, difficulty: "보통" },
-  { id: 3, name: "운동 30분", xp: 50, gold: 25, difficulty: "어려움" },
+// 인벤토리 아이템 데이터
+const equipmentData = [
+  {
+    name: 'Dark Moon Sword',
+    type: 'weapon',
+    src: '/item/파멸의검_에픽.png',
+    stats: { strength: 5, intelligence: 0, luck: 1 }
+  },
+  {
+    name: 'Knight Helmet',
+    type: 'helmet',
+    src: '/item/용기의 투구.png',
+    stats: { strength: 0, intelligence: 3, luck: 0 }
+  },
+  {
+    name: 'Steel Armor',
+    type: 'armor',
+    src: '/item/기사단 정예 갑주.png',
+    stats: { strength: 4, intelligence: 0, luck: 0 }
+  },
+  {
+    name: 'Rusty Sword',
+    type: 'weapon',
+    src: '/item/무딘칼_일반.png',
+    stats: { strength: 1, intelligence: 0, luck: 0 }
+  },
+  {
+    name: 'Old Iron Armor',
+    type: 'armor',
+    src: '/item/낡은 철 갑옷.png',
+    stats: { strength: 2, intelligence: 0, luck: 0 }
+  },
+  {
+    name: 'Brave Crown',
+    type: 'helmet',
+    src: '/item/신왕의 면류관.png',
+    stats: { strength: 0, intelligence: 5, luck: 2 }
+  }
 ];
 
-const equipmentStats = {
-  weapon: {
-    "무딘칼": { 힘: 1 },
-    "루비소드": { 힘: 3 },
-    "파멸의검": { 힘: 5 },
-    "아스가르드의빛": { 힘: 10 },
-  },
-  armor: {
-    "낡은 철 갑옷": { 지능: 1 },
-    "기사단 정예 갑주": { 지능: 3 },
-    "피의 결의 갑옷": { 지능: 5 },
-    "태양의 심장 갑옷": { 지능: 10 },
-  },
-  helmet: {
-    "녹슨 철 투구": { 운: 1 },
-    "용기의 투구": { 운: 3 },
-    "검은 달의 투구": { 운: 5 },
-    "신왕의 면류관": { 운: 10 },
-  },
+// 장비 위치 (실루엣 기준)
+const equipmentPositions = {
+  helmet: { top: '10px', left: '105px' },
+  armor: { top: '100px', left: '90px' },
+  weapon: { top: '180px', left: '200px' },
 };
 
-const getItemImage = (type, name) => `/item/${name}.png`;
-
-export default function LifeRPG() {
-  const [xp, setXP] = useState(0);
-  const [gold, setGold] = useState(0);
+function LifeRPG() {
+  const [xp, setXp] = useState(100);
+  const [gold, setGold] = useState(50);
   const [stats, setStats] = useState(initialStats);
-  const [equipment, setEquipment] = useState(initialEquipment);
-  const [inventory, setInventory] = useState(initialInventory);
+  const [inventory, setInventory] = useState(equipmentData);
+  const [equipped, setEquipped] = useState(initialEquipment);
 
-  const completeQuest = (quest) => {
-    setXP(xp + quest.xp);
-    setGold(gold + quest.gold);
-    // 루팅: 확률적으로 아이템 추가
-    if (Math.random() < 0.1) {
-      const allItems = Object.entries(equipmentStats).flatMap(([type, items]) =>
-        Object.keys(items).map((name) => ({ type, name }))
-      );
-      const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
-      setInventory([...inventory, randomItem]);
-    }
-  };
+  // 장착 및 해제 기능 + 스탯 자동계산
+  const handleEquip = (item) => {
+    setEquipped(prev => {
+      const newEquipped = { ...prev };
 
-  const equipItem = (item) => {
-    setEquipment({ ...equipment, [item.type]: item });
-    const bonus = equipmentStats[item.type][item.name];
-    setStats((prev) => {
-      const newStats = { ...prev };
-      Object.entries(bonus).forEach(([key, value]) => {
-        newStats[key] += value;
+      // 같은 아이템 더블클릭 시 해제
+      if (prev[item.type]?.name === item.name) {
+        newEquipped[item.type] = null;
+      } else {
+        newEquipped[item.type] = item;
+      }
+
+      // 새 스탯 계산
+      const newStats = { strength: 0, intelligence: 0, luck: 0 };
+      Object.values(newEquipped).forEach(eq => {
+        if (eq?.stats) {
+          newStats.strength += eq.stats.strength || 0;
+          newStats.intelligence += eq.stats.intelligence || 0;
+          newStats.luck += eq.stats.luck || 0;
+        }
       });
-      return newStats;
+
+      setStats(newStats);
+      return newEquipped;
     });
   };
 
   return (
-    <div className="app">
-      <h1>Life R.P.G</h1>
-      <div className="stats">
+    <div className="game-container">
+      <div className="character-panel">
+        <h1>Life R.P.G</h1>
         <p>경험치: {xp}</p>
         <p>골드: {gold}</p>
-        <p>힘: {stats.힘} / 지능: {stats.지능} / 운: {stats.운}</p>
-      </div>
+        <p>힘: {stats.strength} / 지능: {stats.intelligence} / 운: {stats.luck}</p>
 
-      <div className="character">
-        <img src="/silhouette.png" alt="실루엣" className="silhouette" />
-        {Object.entries(equipment).map(([type, item]) =>
-          item ? (
+        {/* 캐릭터 실루엣 */}
+        <img src="/item/silhouette.png" alt="silhouette" className="silhouette" />
+
+        {/* 장착된 아이템 표시 */}
+        {Object.keys(equipped).map((slot) => (
+          equipped[slot] ? (
             <img
-              key={type}
-              src={getItemImage(type, item.name)}
-              alt={item.name}
-              className={`equipment-icon ${type}`}
+              key={slot}
+              src={equipped[slot].src}
+              alt={slot}
+              className="equipment-icon"
+              style={equipmentPositions[slot]}
             />
           ) : null
-        )}
-      </div>
-
-      <div className="quests">
-        <h2>퀘스트</h2>
-        {quests.map((quest) => (
-          <div key={quest.id} className="quest">
-            <span>{quest.name} ({quest.difficulty})</span>
-            <button onClick={() => completeQuest(quest)}>완료</button>
-          </div>
         ))}
       </div>
 
-     <div className="inventory">
-  <h2>인벤토리</h2>
-  <div className="inventory-items">
-    {inventory.map((item, index) => (
-      <img
-        key={index}
-        src={item.image}
-        alt={item.name}
-        onDoubleClick={() => equipItem(item)}
-        style={{ width: '50px', height: '50px', margin: '5px', cursor: 'pointer' }}
-      />
-    ))}
-  </div>
-</div>
+      {/* 인벤토리 패널 */}
+      <div className="quest-inventory-panel">
+        <h2>인벤토리</h2>
+        <p>더블클릭으로 장착 / 해제 가능</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          {inventory.map((item, index) => (
+            <img
+              key={index}
+              src={item.src}
+              alt={item.name}
+              title={`${item.name} (힘 +${item.stats.strength}, 지능 +${item.stats.intelligence}, 운 +${item.stats.luck})`}
+              style={{
+                width: '50px',
+                height: '50px',
+                cursor: 'pointer',
+                border: equipped[item.type]?.name === item.name ? '2px solid gold' : '1px solid #ccc',
+                borderRadius: '8px',
+                padding: '2px',
+                backgroundColor: '#f9f9f9'
+              }}
+              onDoubleClick={() => handleEquip(item)}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
+
+export default LifeRPG;
